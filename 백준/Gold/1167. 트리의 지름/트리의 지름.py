@@ -14,23 +14,27 @@ for _ in range(V):
         tree[cnt_node].append((adj_node, adj_cost))
         idx += 2
 
-def BFS(start):
-    q=deque()
-    q.append((start,0))
-    visited = [-1]*(V+1)
-    visited[start] = 0
-    res = [0,0]
-    while q:
-        cnt_node, cnt_dist = q.popleft()
-        for adj_node, adj_dist in tree[cnt_node]:
-            if visited[adj_node] == -1 : #방문 안했으면
-                cal_dist = adj_dist + cnt_dist
-                q.append((adj_node,cal_dist))
-                visited[adj_node] = cal_dist
-                if res[1] < cal_dist :
-                    res = [adj_node,cal_dist]
-    return res
 
-point,_ = BFS(1)
-print(BFS(point)[1])
+visited = [-1]*(V+1)
+visited[1] = 0
 
+def DFS(node,dist):
+    for v,d in tree[node]:
+        cal_dist = dist + d
+        if visited[v] == -1 :
+            visited[v] = cal_dist
+            DFS(v,cal_dist)
+    return 
+
+
+DFS(1,0)
+tmp=[0,0]
+for i in range(1,V+1):
+    if visited[i]>tmp[1]:
+        tmp= [i,visited[i]]
+        
+visited = [-1]*(V+1)
+visited[tmp[0]] = 0
+
+DFS(tmp[0],0)
+print(max(visited))
